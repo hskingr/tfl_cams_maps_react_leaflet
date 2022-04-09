@@ -13,8 +13,8 @@ useEffect(() => {
     try {
             console.log('fetching markers')
             const body = props.bounds
-            const username = "harry"
-            const password = "x@xnEH$X5MFhq7"
+            const username = process.env.REACT_APP_N8N_USER
+            const password = process.env.REACT_APP_N8N_PASSWORD
             const auth = {
                 auth: {
                     username, password

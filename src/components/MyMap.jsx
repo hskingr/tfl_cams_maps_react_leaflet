@@ -1,20 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import ApiMarker from "./ApiMarker";
-import { positions } from '@mui/system';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
-import { map } from "leaflet";
+import { MapContainer, TileLayer } from 'react-leaflet'
 import MovedMap from "./MovedMap";
 import AddMarkers from "./AddMarkers";
-import { spacing } from '@mui/system';
-import { Container, Box, Grid, Collapse } from '@mui/material';
+import { Box, Collapse } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { flexbox } from '@mui/system';
 import Zoom from '@mui/material/Zoom';
-import { Refresh, AccessAlarm, ThreeDRotation } from '@mui/icons-material';
-import { Button, IconButton } from '@mui/material';
+import { Refresh } from '@mui/icons-material';
+import { Button } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import CircularProgress from '@mui/material/CircularProgress';
-import { green } from '@mui/material/colors';
 
 import './myMap.css'
 
@@ -27,15 +22,11 @@ const [map, setMap] = useState(null)
 const [moved, setMoved] = useState(false)
 const [refresh, setRefresh] = useState(false)
 const [markers, setMarkers] = useState([])
-const [isLoading, setIsLoading] = useState(false)
 
 function newMarkers(markers) {
 setMarkers(markers)
 }
 
-function loading() {
-setIsLoading(!isLoading)
-}
 
 function changeMoved() {
 setMoved(true)
@@ -69,7 +60,19 @@ newBounds ( {
 })
 }
 
-
+const exampleMarker = {
+    "_id": "62517723e54cd01581acd3b6",
+    "name": "southwark-st-southwark-bdge-rd",
+    "url": "https://s3-eu-west-1.amazonaws.com/jamcams.tfl.gov.uk/00001.04214.mp4",
+    "timeDate": "2022-04-09T12-06-54-133Z",
+    "location": {
+        "type": "Point",
+        "coordinates": [
+            -0.09535,
+            51.5048
+        ]
+    }
+}
 
 const Item = styled(Paper)(({ theme }) => ({
 backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -88,19 +91,23 @@ return (
         {<MovedMap boundData={newBounds} map={map} changeMoved={changeMoved} /> }
         {refresh && <AddMarkers bounds={bounds} refresh={refresh} refreshFalse={refreshFalse} newMarkers={newMarkers} /> }
         {markers.map(marker => {
-        return ( <div>
+        return (
+            <div>
             {markers.map( (marker,index) => {
             console.log(marker)
             return <ApiMarker map={map} key={index} marker={marker} lat={marker.location.coordinates[1]} long={marker.location.coordinates[0]} />
             })}
+
         </div>
+
         )})}
+        <ApiMarker map={map} key={200} marker={exampleMarker} lat={exampleMarker.location.coordinates[1]} long={exampleMarker.location.coordinates[0]} />
     </MapContainer>
 
-    <Box sx={{ p: 2, right: 0, top: 0, zIndex: 5000, position: 'absolute'}}>
-        <Grid rowSpacing={5} container direction="column" justifyContent="center" alignItems="flex-end">
-            <Grid item xs={3}>
-                <Collapse in={!refresh} orientation='horizontal' >
+      {<Box sx={{ p: 2, right: 0, top: 0, zIndex: 5000, position: 'absolute'}}>
+      <Box rowSpacing={0} display='flex' container flex-wrap='wrap' direction="column" justifyContent="center" alignItems="flex-end">
+          <Box sx={{flex: '50%'}} >
+          <Collapse in={!refresh} orientation='horizontal' >
                     <Zoom in={true}>
                         <Button startIcon={<Refresh />} onClick={clickedRefresh} sx={{
                                 textAlign: 'center',
@@ -110,41 +117,22 @@ return (
                                 }} variant="contained" >
                             Refresh
                         </Button>
-
                     </Zoom>
-
-
                 </Collapse>
-
-<Collapse in={refresh} >
-{<CircularProgress
-            size={24}
-            sx={{
-              color: green[500],
-            }}
-             />}
-</Collapse>
-            </Grid>
-            <Grid item xs={3}>
-
-            </Grid>
-            <Grid item xs={3}>
-
-            </Grid>
-            <Grid item xs={3}>
-
-            </Grid>
-            <Grid item xs={4}>
-
-            </Grid>
-            <Grid item xs={8}>
-
-            </Grid>
-        </Grid>
-    </Box>
-
-
-
+          </Box>
+          <Box sx={{flex: '50%'}} >
+          <Collapse in={refresh} orientation='horizontal'>
+                    {<CircularProgress
+                        easing={{enter: 10, exit: 10}}
+                        size={24}
+                        thickness={8}
+                        sx={{
+                     }}
+                />}
+                </Collapse>
+          </Box>
+      </Box>
+      </Box>}
 
 </div>
 )
