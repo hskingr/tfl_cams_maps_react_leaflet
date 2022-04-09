@@ -1,93 +1,153 @@
-import React, { useState } from "react";
-import MapEventExample from "./MapEventExample";
+import React, { useState, useEffect } from "react";
 import ApiMarker from "./ApiMarker";
-import axios from "axios";
-import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
-import { useMapEvent, MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet'
+import { positions } from '@mui/system';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
+import { map } from "leaflet";
+import MovedMap from "./MovedMap";
+import AddMarkers from "./AddMarkers";
+import { spacing } from '@mui/system';
+import { Container, Box, Grid, Collapse } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import { flexbox } from '@mui/system';
+import Zoom from '@mui/material/Zoom';
+import { Refresh, AccessAlarm, ThreeDRotation } from '@mui/icons-material';
+import { Button, IconButton } from '@mui/material';
+import Paper from '@mui/material/Paper';
+import CircularProgress from '@mui/material/CircularProgress';
+import { green } from '@mui/material/colors';
+
+import './myMap.css'
+
 
 function MyMap() {
-    const [isReady, setIsReady] = useState(false)
-    const [markers, setMarkers] = useState({}); // Array instead of object
 
-    async function getMarkers() {
-        try {
-            const body = {
-                "southWest": {
-                    "long": -0.08325576782226562,
-                    "lat": 51.491110246849814
-                },
-                "northEast": {
-                    "long": -0.04497528076171874,
-                    "lat": 51.47053071051183
-                }
-             }
-            const username = "harry"
-            const password = "x@xnEH$X5MFhq7"
-            const headers ={ headers: {
-                }}
-            const auth = {
-                auth: {
-                    username, password
-                }
-            }
-            const method = {method: 'get'}
-            const config = {
-                ...headers,
-                ...auth,
-                ...method,
-                params: body
-            }
-            console.log(config)
+const [isReady, setReady] = useState(false)
+const [bounds, SetBounds] = useState([])
+const [map, setMap] = useState(null)
+const [moved, setMoved] = useState(false)
+const [refresh, setRefresh] = useState(false)
+const [markers, setMarkers] = useState([])
+const [isLoading, setIsLoading] = useState(false)
 
+function newMarkers(markers) {
+setMarkers(markers)
+}
 
-        //   const res = await axios.get(`https://n8n.libraryoftype.xyz/webhook/getBounds`)
+function loading() {
+setIsLoading(!isLoading)
+}
 
-            const response = await axios.get('https://n8n.libraryoftype.xyz/webhook-test/getBounds', {
-                params: {
-                    ...body
-                }
-            });
-            console.log(response);
+function changeMoved() {
+setMoved(true)
+}
 
-            // const x = await axios({
-            //     url: 'https://dog.ceo/api/breeds/list/all',
+function clickedRefresh() {
+setRefresh(true)
+}
 
+function refreshFalse() {
+setRefresh(false)
+}
 
+function newBounds(boundData) {
+    console.log(boundData)
+SetBounds(boundData)
+}
 
-            //     method: 'get',
-            //     auth: {
-            //         username, password
-            //     },
-            //     body
-
-
-            //   })
-            //   console.log(x)
-
-        } catch (error) {
-            console.log(error)
-        }
-
+function makeReady(map) {
+setMap(map)
+setReady(true)
+newBounds ( {
+    "southWest": {
+        "long": map.getBounds()._southWest.lng,
+        "lat": map.getBounds()._southWest.lat
+    },
+    "northEast": {
+        "long": map.getBounds()._northEast.lng,
+        "lat": map.getBounds()._northEast.lat
     }
+})
+}
 
 
-    function changeReady() {
-        setIsReady(true)
-    }
 
-    return (
-        <MapContainer whenReady={getMarkers} style={{height: 800, width: 800}} center={[51.505, -0.09]} zoom={13}>
-        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-          {console.log(markers)}
-           <Marker position={[51.505, -0.01]} >
-             <Popup>
-             A pretty CSS3 popup. <br /> Easily customizable.
-             </Popup>
-           </Marker>
-            {/* <ApiMarker /> */}
-           changeReady && <ApiMarker />
-     </MapContainer>
-    )
+const Item = styled(Paper)(({ theme }) => ({
+backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+...theme.typography.body2,
+padding: theme.spacing(1),
+textAlign: 'center',
+color: theme.palette.text.secondary,
+}));
+
+return (
+<div style={{height: '100vh', width: '100vw'}}>
+
+    <MapContainer whenCreated={makeReady} style={{ height: '100%', width: '100%'}} center={[51.505,
+        -0.09]} zoom={16}>
+        <TileLayer url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png" />
+        {<MovedMap boundData={newBounds} map={map} changeMoved={changeMoved} /> }
+        {refresh && <AddMarkers bounds={bounds} refresh={refresh} refreshFalse={refreshFalse} newMarkers={newMarkers} /> }
+        {markers.map(marker => {
+        return ( <div>
+            {markers.map( (marker,index) => {
+            console.log(marker)
+            return <ApiMarker map={map} key={index} marker={marker} lat={marker.location.coordinates[1]} long={marker.location.coordinates[0]} />
+            })}
+        </div>
+        )})}
+    </MapContainer>
+
+    <Box sx={{ p: 2, right: 0, top: 0, zIndex: 5000, position: 'absolute'}}>
+        <Grid rowSpacing={5} container direction="column" justifyContent="center" alignItems="flex-end">
+            <Grid item xs={3}>
+                <Collapse in={!refresh} orientation='horizontal' >
+                    <Zoom in={true}>
+                        <Button startIcon={<Refresh />} onClick={clickedRefresh} sx={{
+                                textAlign: 'center',
+                                zIndex: 'modal',
+                                marginLeft: "auto",
+                                marginRight: "auto"
+                                }} variant="contained" >
+                            Refresh
+                        </Button>
+
+                    </Zoom>
+
+
+                </Collapse>
+
+<Collapse in={refresh} >
+{<CircularProgress
+            size={24}
+            sx={{
+              color: green[500],
+            }}
+             />}
+</Collapse>
+            </Grid>
+            <Grid item xs={3}>
+
+            </Grid>
+            <Grid item xs={3}>
+
+            </Grid>
+            <Grid item xs={3}>
+
+            </Grid>
+            <Grid item xs={4}>
+
+            </Grid>
+            <Grid item xs={8}>
+
+            </Grid>
+        </Grid>
+    </Box>
+
+
+
+
+</div>
+)
 }
 
 export default MyMap

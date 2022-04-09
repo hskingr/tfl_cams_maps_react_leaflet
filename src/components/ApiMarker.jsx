@@ -1,19 +1,28 @@
 import React from "react";
-import { useMapEvent, MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet'
+import { Marker, Popup, Icon } from 'react-leaflet'
+import RoomIcon from '@mui/icons-material/Room';
+import L from 'leaflet';
+import './components-styles/leaflet.css'
+
+
 
 function ApiMarker(props) {
 
-    // function doThing() {
-    //     const map = useMap()
-    //     console.log(map)
-    // }
+  function clicked(e) {
+    console.log(props.map)
+    props.map.setView(e.latlng, 20, { animation: true });
+  }
 
-        const map = useMap()
-        // console.log(map.getBounds())
       return (
-        <Marker position={[51.505, -0.09]} >
-        <Popup>
-        A pretty CSS3 popup. <br /> Easily customizable.
+        <Marker eventHandlers={{
+    click: (e) => {
+      clicked(e)
+    },
+  }} position={[ props.lat, props.long ]} >
+        <Popup style={{ width: '300px' }} >
+        {props.marker.name} <br />
+        <a href={props.marker.url}> link </a>
+        <video style={{ width:'300px' }} autoplay="true" src={props.marker.url}type="video/mp4" />
         </Popup>
       </Marker>
       )

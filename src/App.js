@@ -1,17 +1,13 @@
 import React, { useState } from 'react'
 import MyMap from './components/MyMap';
+import CssBaseline from '@mui/material/CssBaseline';
 
 function App() {
 
-  // [markers, setMarkers] = useState([])
-
-
-
-
   return (
     <div className="App">
+       <CssBaseline />
        <MyMap />
-
     </div>
   );
 }
