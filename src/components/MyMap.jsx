@@ -78,8 +78,7 @@ newBounds ( {
 return (
 <div style={{height: '100vh', width: '100vw'}}>
 
-    <MapContainer whenCreated={makeReady} style={{ height: '100%', width: '100%'}} center={[51.505,
-        -0.09]} zoom={16}>
+    <MapContainer whenCreated={makeReady} style={{ height: '100%', width: '100%'}} center={[51.505,-0.09]} zoom={16} maxZoom={30} >
         <TileLayer url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png" />
         {/* detects map movement and updates bounds for database requests */}
         {<MovedMap boundData={newBounds} map={map} changeMoved={changeMoved} /> }
@@ -97,7 +96,8 @@ return (
         </div>
 
         )})}
-        <ApiMarker map={map} key={200} marker={exampleMarker} lat={exampleMarker.location.coordinates[1]} long={exampleMarker.location.coordinates[0]} />
+        {/* used for examples */}
+        {/* <ApiMarker map={map} key={200} marker={exampleMarker} lat={exampleMarker.location.coordinates[1]} long={exampleMarker.location.coordinates[0]} /> */}
     </MapContainer>
 {/* This is a flexbox for the button components -- need to migrate to its own component file */}
       {<Box sx={{ p: 2, right: 0, top: 0, zIndex: 5000, position: 'absolute'}}>

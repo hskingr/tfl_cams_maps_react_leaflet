@@ -21,7 +21,7 @@ function ApiMarker(props) {
     const centerPoint = props.map.getSize().divideBy(2)
     const bounds = props.map.getBounds()
     console.log(props.map.getCenter())
-    props.map.setView(point, 15,  { animate: true })
+    props.map.setView(props.map.getCenter(), 17,  { animate: true })
   }
 
   //event handler for clicking on marker
