@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useMapEvent, useMapEvents } from "react-leaflet";
 
-
+//this component updates the bounds of the view everytime the map is dragged
 function MovedMap(props) {
     const map = useMapEvent({
         dragend() {

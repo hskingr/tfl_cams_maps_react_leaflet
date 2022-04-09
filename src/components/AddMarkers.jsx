@@ -11,6 +11,7 @@ useEffect(() => {
 
   async function getMarkers() {
     try {
+        //gets markers my calling the webhook endpoints using axios
             console.log('fetching markers')
             const body = props.bounds
             const username = process.env.REACT_APP_N8N_USER
@@ -31,6 +32,7 @@ useEffect(() => {
                     }
                 }
             });
+            //returns results into an updated state for the map function to display.
             await props.newMarkers(await response.data)
             props.refreshFalse()
     } catch (error) {

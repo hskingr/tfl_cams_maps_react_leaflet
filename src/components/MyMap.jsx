@@ -27,7 +27,6 @@ function newMarkers(markers) {
 setMarkers(markers)
 }
 
-
 function changeMoved() {
 setMoved(true)
 }
@@ -60,27 +59,21 @@ newBounds ( {
 })
 }
 
-const exampleMarker = {
-    "_id": "62517723e54cd01581acd3b6",
-    "name": "southwark-st-southwark-bdge-rd",
-    "url": "https://s3-eu-west-1.amazonaws.com/jamcams.tfl.gov.uk/00001.04214.mp4",
-    "timeDate": "2022-04-09T12-06-54-133Z",
-    "location": {
-        "type": "Point",
-        "coordinates": [
-            -0.09535,
-            51.5048
-        ]
-    }
-}
+//used for tests
 
-const Item = styled(Paper)(({ theme }) => ({
-backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-...theme.typography.body2,
-padding: theme.spacing(1),
-textAlign: 'center',
-color: theme.palette.text.secondary,
-}));
+// const exampleMarker = {
+//     "_id": "62517723e54cd01581acd3b6",
+//     "name": "southwark-st-southwark-bdge-rd",
+//     "url": "https://s3-eu-west-1.amazonaws.com/jamcams.tfl.gov.uk/00001.04214.mp4",
+//     "timeDate": "2022-04-09T12-06-54-133Z",
+//     "location": {
+//         "type": "Point",
+//         "coordinates": [
+//             -0.09535,
+//             51.5048
+//         ]
+//     }
+// }
 
 return (
 <div style={{height: '100vh', width: '100vw'}}>
@@ -88,8 +81,11 @@ return (
     <MapContainer whenCreated={makeReady} style={{ height: '100%', width: '100%'}} center={[51.505,
         -0.09]} zoom={16}>
         <TileLayer url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png" />
+        {/* detects map movement and updates bounds for database requests */}
         {<MovedMap boundData={newBounds} map={map} changeMoved={changeMoved} /> }
+        {/* if the refresh button is pressed, add markers from database */}
         {refresh && <AddMarkers bounds={bounds} refresh={refresh} refreshFalse={refreshFalse} newMarkers={newMarkers} /> }
+        {/* loads markers from state if any */}
         {markers.map(marker => {
         return (
             <div>
@@ -103,10 +99,11 @@ return (
         )})}
         <ApiMarker map={map} key={200} marker={exampleMarker} lat={exampleMarker.location.coordinates[1]} long={exampleMarker.location.coordinates[0]} />
     </MapContainer>
-
+{/* This is a flexbox for the button components -- need to migrate to its own component file */}
       {<Box sx={{ p: 2, right: 0, top: 0, zIndex: 5000, position: 'absolute'}}>
       <Box rowSpacing={0} display='flex' container flex-wrap='wrap' direction="column" justifyContent="center" alignItems="flex-end">
           <Box sx={{flex: '50%'}} >
+              {/* some logic is run to swap to a loading icon is the refresh button is pressed */}
           <Collapse in={!refresh} orientation='horizontal' >
                     <Zoom in={true}>
                         <Button startIcon={<Refresh />} onClick={clickedRefresh} sx={{
