@@ -1,70 +1,26 @@
-# Getting Started with Create React App
+# TFL Traffic Camera App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+ ![demonstration](/docs/demonstration.gif)
 
-## Available Scripts
+This is a react app that uses TFL Traffic Camera data and display them on a map using leaflet.js.
 
-In the project directory, you can run:
+The data was originally taken in the form of a large Json file, which has been parsed and organised and added to a Mongo database. Webhooks were created as API endpoints to query the database. This was all done using a workflow automation application called n8n. I host the instance myself in a docker container and it serves as the backend for all the data queries that the react app has.
 
-### `npm start`
+## Using Workflow automation to quickly set up a shallow API with webhooks as endpoints
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+n8n uses modular components which can be linked to create flows. The first image displays the process of getting data from the Tfl website and populating a MongoDB instance with it. Once the database has been made, you can add cronjobs to re-run the workflow to update existing entries or add new ones.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+![workflow add to database](/docs/workflow_add_to_database.png)
 
-### `npm test`
+Once the data has been populated, A webhook was created which listens to a GET request. Inside the GET request is the latitude and longitude bounds of the frontend UI. This is specified to use the `$GeoWithin` query, which only returns valid data within the bounds specified in the GET request. The webhook responds to the request once the call to the database has been made. React then uses that data to create markers on react-leaflet, which is a wraparound for the leaflet.js library.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+![workflow api endpoint](/docs/workflow_webhook_api_endpoint.png)
 
-### `npm run build`
+This is an example of the returned data from a GET request made in Postman.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+![workflow response data](/docs/api_response_data.png)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### Todo
+- Add a Docker image and docker-compose file for deployment.
+- Implement some testing.
+- Add location based input inside the app.
