@@ -20,6 +20,14 @@ This is an example of the returned data from a GET request made in Postman.
 
 ![workflow response data](/docs/api_response_data.png)
 
+## ENVIRONMENT VARIABLES
+
+```
+-
+-
+-
+```
+
 ### Todo
 - Add a Docker image and docker-compose file for deployment.
 - Implement some testing.

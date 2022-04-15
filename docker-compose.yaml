@@ -4,6 +4,12 @@ services:
     container_name: tfl-cam-app
     build:
       context: .
+      args:
+        - REACT_APP_TILE_ACCESS
+        - REACT_APP_N8N_PASSWORD
+        - REACT_APP_N8N_USER
     image: tflcamsapp:v1
+
     ports:
+      # - 100.87.185.57:3000:80
       - 3000:80
