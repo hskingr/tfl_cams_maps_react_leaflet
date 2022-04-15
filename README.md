@@ -1,6 +1,7 @@
 # TFL Traffic Camera App
 
- ![demonstration](/docs/demonstration.gif)
+ ![demonstration](/docs/showcase_1.png)
+ ![demonstration](/docs/showcase_2.png)
 
 This is a react app that uses TFL Traffic Camera data and display them on a map using leaflet.js.
 
@@ -19,6 +20,14 @@ Once the data has been populated, A webhook was created which listens to a GET r
 This is an example of the returned data from a GET request made in Postman.
 
 ![workflow response data](/docs/api_response_data.png)
+
+## ENVIRONMENT VARIABLES
+
+```
+-
+-
+-
+```
 
 ### Todo
 - Add a Docker image and docker-compose file for deployment.
