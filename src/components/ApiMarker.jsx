@@ -20,6 +20,7 @@ function ApiMarker(props) {
 
   const myIcon = L.icon({
     iconUrl: icon,
+    iconAnchor: [18,36]
   });
 
   //this is where the marker is created for the map function in the main map component.
