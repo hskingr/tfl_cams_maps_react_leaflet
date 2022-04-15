@@ -5,15 +5,31 @@ import { useMapEvent, MapContainer, TileLayer, Marker, Popup, useMap } from 'rea
 
 function AddMarkers(props) {
 
+/*
 useEffect(() => {
     getMarkers()
 }, [props.refresh])
+*/
+
+function updateBounds() {
+    const bounds = {
+        "southWest": {
+            "long": props.map.getBounds()._southWest.lng,
+            "lat": props.map.getBounds()._southWest.lat
+        },
+        "northEast": {
+            "long": props.map.getBounds()._northEast.lng,
+            "lat": props.map.getBounds()._northEast.lat
+        }
+     }
+    return bounds
+}
 
   async function getMarkers() {
     try {
         //gets markers my calling the webhook endpoints using axios
             console.log('fetching markers')
-            const body = props.bounds
+            const body = updateBounds()
             const username = process.env.REACT_APP_N8N_USER
             const password = process.env.REACT_APP_N8N_PASSWORD
             const auth = {
@@ -40,7 +56,7 @@ useEffect(() => {
     }
 }
 
-  return ( null )
+  return ( null)
 }
 
 export default AddMarkers

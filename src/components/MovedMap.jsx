@@ -3,10 +3,8 @@ import { useMapEvent, useMapEvents } from "react-leaflet";
 
 //this component updates the bounds of the view everytime the map is dragged
 function MovedMap(props) {
-    const map = useMapEvent({
-        dragend() {
-            props.changeMoved()
-                  const  bounds = {
+    function updateBounds() {
+        const  bounds = {
             "southWest": {
                 "long": map.getBounds()._southWest.lng,
                 "lat": map.getBounds()._southWest.lat
@@ -17,6 +15,15 @@ function MovedMap(props) {
             }
          }
          props.boundData(bounds)
+    }
+
+    const map = useMapEvents({
+        dragend: () => {
+            // updateBounds()
+            console.log('moved')
+        }, zoomend: () => {
+            // updateBounds()
+            console.log('zoomed')
         }
       })
 return null
