@@ -1,0 +1,9 @@
+version: "3"
+services:
+  tflApp:
+    container_name: tfl-cam-app
+    build:
+      context: .
+    image: tflcamsapp:v1
+    ports:
+      - 3000:80
