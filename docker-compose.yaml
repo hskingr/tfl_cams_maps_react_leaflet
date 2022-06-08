@@ -9,7 +9,7 @@ services:
         - REACT_APP_N8N_PASSWORD
         - REACT_APP_N8N_USER
         - REACT_APP_API_URL
-    image: tflcamsapp:latest
+    image: f4zphp27xi2s27yn/my_repo_topor:tflcamapp
     ports:
       # - 100.87.185.57:3000:80
       - 3000:80
