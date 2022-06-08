@@ -58,7 +58,9 @@ function RefreshMarkerButton(props) {
       const response = await axios.get(url, {
         params: {
           ...body,
-          headers: {},
+          headers: {
+            "Access-Control-Request-Private-Network": true,
+          },
           auth: {
             ...auth,
           },
