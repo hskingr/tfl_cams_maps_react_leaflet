@@ -48,18 +48,15 @@ function MyMap() {
   //used for tests
 
   const exampleMarker = {
-      "_id": "62517723e54cd01581acd3b6",
-      "name": "southwark-st-southwark-bdge-rd",
-      "url": "https://s3-eu-west-1.amazonaws.com/jamcams.tfl.gov.uk/00001.04214.mp4",
-      "timeDate": "2022-04-09T12-06-54-133Z",
-      "location": {
-          "type": "Point",
-          "coordinates": [
-              -0.09535,
-              51.5048
-          ]
-      }
-  }
+    _id: "62517723e54cd01581acd3b6",
+    name: "southwark-st-southwark-bdge-rd",
+    url: "https://s3-eu-west-1.amazonaws.com/jamcams.tfl.gov.uk/00001.04214.mp4",
+    timeDate: "2022-04-09T12-06-54-133Z",
+    location: {
+      type: "Point",
+      coordinates: [-0.09535, 51.5048],
+    },
+  };
   // const exampleMarker2 = {
   //     "_id": "62517723e54cd01581acd3b6",
   //     "name": "southwark-st-southwark-bdge-rd",
@@ -92,9 +89,8 @@ function MyMap() {
         {/* if the refresh button is pressed, add markers from database */}
         {/* loads markers from state if any */}
 
-
         {markers.map((marker, index) => {
-          console.log(marker._id);
+          // console.log(marker._id);
 
           return (
             <ApiMarker
@@ -105,7 +101,6 @@ function MyMap() {
               long={marker.location.coordinates[0]}
             />
           );
-
         })}
 
         {/* used for examples */}

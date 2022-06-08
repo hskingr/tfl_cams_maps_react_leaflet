@@ -43,28 +43,27 @@ function RefreshMarkerButton(props) {
   async function getMarkers() {
     try {
       //gets markers my calling the webhook endpoints using axios
-      console.log("fetching markers");
+      // console.log("fetching markers");
       const body = updateBounds();
+      // console.log(body);
       const username = process.env.REACT_APP_N8N_USER;
       const password = process.env.REACT_APP_N8N_PASSWORD;
+      const url = process.env.REACT_APP_API_URL;
       const auth = {
         auth: {
           username,
           password,
         },
       };
-      const response = await axios.get(
-        "https://n8n.libraryoftype.xyz/webhook/getBounds",
-        {
-          params: {
-            ...body,
-            headers: {},
-            auth: {
-              ...auth,
-            },
+      const response = await axios.get(url, {
+        params: {
+          ...body,
+          headers: {},
+          auth: {
+            ...auth,
           },
-        }
-      );
+        },
+      });
       //returns results into an updated state for the map function to display.
       await props.setMarkers(await response.data);
       refreshFalse();
@@ -96,9 +95,9 @@ function RefreshMarkerButton(props) {
           <Grid item xs={12} md={8}>
             <LoadingButton
               sx={{
-                  "&.Mui-disabled": {
-                    'background-color': '#1976d2'
-                  }
+                "&.Mui-disabled": {
+                  "background-color": "#1976d2",
+                },
               }}
               onClick={clickedRefresh}
               loading={refresh}
@@ -109,8 +108,7 @@ function RefreshMarkerButton(props) {
               Refresh
             </LoadingButton>
           </Grid>
-          <Grid item xs={1} md={4}>
-          </Grid>
+          <Grid item xs={1} md={4}></Grid>
         </Grid>
       </Box>
     </div>
